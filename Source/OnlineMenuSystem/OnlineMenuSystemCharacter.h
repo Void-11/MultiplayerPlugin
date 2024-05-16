@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "Interfaces/OnlineSessionInterface.h"
 #include "OnlineMenuSystemCharacter.generated.h"
 
 class USpringArmComponent;
@@ -45,9 +46,17 @@ class AOnlineMenuSystemCharacter : public ACharacter
 	UInputAction* LookAction;
 
 public:
+	
 	AOnlineMenuSystemCharacter();
 	
+	/** Returns CameraBoom subobject **/
+	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	/** Returns FollowCamera subobject **/
+	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+	// Pointer to the online session interface
+	IOnlineSessionPtr OnlineSessionInterface;;
+	
 protected:
 
 	/** Called for movement input */
@@ -61,14 +70,20 @@ protected:
 	
 	// To add mapping context
 	virtual void BeginPlay();
+	
+	UFUNCTION(BlueprintCallable)
+	void CreateGameSession();
 
-public:
-	/** Returns CameraBoom subobject **/
-	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	/** Returns FollowCamera subobject **/
-	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	UFUNCTION(BlueprintCallable)
+	void JoinGameSession();
 
-	// Pointer to the online session interface
-	TSharedPtr<class IOnlineSession, ESPMode::ThreadSafe> OnlineSessionInterface;
+	void OnCreateSessionComplete(FName SessionName, bool bWasSuccessful);
+	void OnFindSessionsComplete(bool bWasSuccessful);
+
+private:
+
+	FOnCreateSessionCompleteDelegate CreateSessionCompleteDelegate;
+	FOnFindSessionsCompleteDelegate FindSessionsCompleteDelegate;
+	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 };
 
