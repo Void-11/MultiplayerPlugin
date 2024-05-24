@@ -4,8 +4,12 @@
 #include "GameMenu.h"
 #include "Components/Button.h"
 #include "OnlineSessionsSubsystem.h"
-void UGameMenu::MenuSetup()
+
+void UGameMenu::MenuSetup(const int32 InNumPublicConnections, const FString& InMatchType, const FString& InPathToLobby)
 {
+	NumPublicConnections = InNumPublicConnections;
+	MatchType = InMatchType;
+	
 	AddToViewport();
 	SetVisibility(ESlateVisibility::Visible);
 	SetIsFocusable(true);;
@@ -36,6 +40,26 @@ void UGameMenu::MenuSetup()
 	}
 }
 
+void UGameMenu::MenuTearDown()
+{
+	// The "inverse" of MenuSetup above
+
+	RemoveFromParent();
+
+	if (const auto World = GetWorld())
+	{
+		if (const auto PlayerController = World->GetFirstPlayerController())
+		{
+			// Data structure used to set up an input mode that allows only the Game to
+			// respond to user input
+			const FInputModeGameOnly InputModeData;
+
+			PlayerController->SetInputMode(InputModeData);
+			PlayerController->SetShowMouseCursor(false);
+		}
+	}
+}
+
 bool UGameMenu::Initialize()
 {
 	if (Super::Initialize())
@@ -55,6 +79,16 @@ bool UGameMenu::Initialize()
 	{
 		return false;
 	}
+}
+
+void UGameMenu::NativeDestruct()
+{
+	// Invoked when the underlying ui widget disappears which means we can tear
+	// down menu infrastructure and re-enable user input to the game
+
+	MenuTearDown();
+
+	Super::NativeDestruct();
 }
 
 void UGameMenu::OnHostButtonClicked()
@@ -92,3 +126,4 @@ void UGameMenu::OnJoinButtonClicked()
 		OnlineSessionsSubsystem->FindSessions(10000);
 	}
 }
+

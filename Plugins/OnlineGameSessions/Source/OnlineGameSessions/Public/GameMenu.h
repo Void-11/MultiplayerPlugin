@@ -17,10 +17,15 @@ class ONLINEGAMESESSIONS_API UGameMenu : public UUserWidget
 {
 	GENERATED_BODY()
 
+protected:
+
+	virtual void NativeDestruct() override;
 public:
 	
 	UFUNCTION(BlueprintCallable)
-	void MenuSetup();
+	void MenuSetup(int32 InNumPublicConnections = 7,
+				   const FString& InMatchType = TEXT("FreeForAll"),
+				   const FString& InPathToLobby = TEXT("Lobby"));
 
 	virtual bool Initialize() override;
 
@@ -40,5 +45,9 @@ private:
 
 	UPROPERTY()
 	UOnlineSessionsSubsystem* OnlineSessionsSubsystem{ nullptr };
-	
+
+	void MenuTearDown();
+
+	int32 NumPublicConnections{ 7 };
+	FString MatchType{ TEXT("FreeForAll") };
 };
