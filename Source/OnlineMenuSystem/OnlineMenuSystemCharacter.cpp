@@ -215,8 +215,7 @@ void AOnlineMenuSystemCharacter::OnCreateSessionComplete(FName SessionName, bool
 			);
 		}
 
-		UWorld* World = GetWorld();
-		if (World)
+		if (const auto World = GetWorld())
 		{
 			World->ServerTravel(FString("/Game/ThirdPerson/Maps/GameLobby?listen"));
 		}

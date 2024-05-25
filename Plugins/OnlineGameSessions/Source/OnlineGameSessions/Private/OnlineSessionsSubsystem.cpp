@@ -19,7 +19,7 @@ UOnlineSessionsSubsystem::UOnlineSessionsSubsystem():
 	}
 }
 
-void UOnlineSessionsSubsystem::CreateSession(int32 NumPublicConnections, FString MatchType, int32 UniqueId)
+void UOnlineSessionsSubsystem::CreateSession(const int32 NumPublicConnections, const FString& MatchType)
 {
 	if (!SessionInterface.IsValid())
 	{

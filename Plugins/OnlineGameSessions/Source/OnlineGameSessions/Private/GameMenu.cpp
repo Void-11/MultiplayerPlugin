@@ -104,7 +104,12 @@ void UGameMenu::OnHostButtonClicked()
 	if (OnlineSessionsSubsystem)
 	{
 		HostButton->SetIsEnabled(false);
-		OnlineSessionsSubsystem->CreateSession(4, FString("FreeForAll"),1);
+		OnlineSessionsSubsystem->CreateSession(NumPublicConnections, MatchType);
+
+		if (const auto World = GetWorld())
+		{
+			World->ServerTravel(FString("/Game/ThirdPerson/Maps/GameLobby?listen"));
+		}
 	}
 }
 

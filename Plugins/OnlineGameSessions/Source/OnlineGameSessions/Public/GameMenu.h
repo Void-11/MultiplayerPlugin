@@ -20,6 +20,7 @@ class ONLINEGAMESESSIONS_API UGameMenu : public UUserWidget
 protected:
 
 	virtual void NativeDestruct() override;
+	
 public:
 	
 	UFUNCTION(BlueprintCallable)

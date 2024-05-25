@@ -21,7 +21,7 @@ public:
 
 	// Called by Menu class.
 	UFUNCTION()
-	void CreateSession(int32 NumPublicConnections, FString MatchType, int32 UniqueId);
+	void CreateSession(int32 NumPublicConnections, const FString& MatchType);
 
 	void FindSessions(int32 MaxSearchResults);
 	void JoinSession(const FOnlineSessionSearchResult& SessionResult);
