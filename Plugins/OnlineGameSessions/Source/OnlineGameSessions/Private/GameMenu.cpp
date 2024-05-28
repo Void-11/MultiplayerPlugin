@@ -38,6 +38,15 @@ void UGameMenu::MenuSetup(const int32 InNumPublicConnections, const FString& InM
 	{
 		OnlineSessionsSubsystem = GameInstance->GetSubsystem<UOnlineSessionsSubsystem>();
 	}
+
+	if (OnlineSessionsSubsystem)
+	{
+		OnlineSessionsSubsystem->MultiplayerOnCreateSessionComplete.AddDynamic(this, &UGameMenu::OnCreateSession);
+		OnlineSessionsSubsystem->MultiplayerOnFindSessionsComplete.AddUObject(this, &UGameMenu::OnFindSessions);
+		OnlineSessionsSubsystem->MultiplayerOnJoinSessionComplete.AddUObject(this, &UGameMenu::OnJoinSession);
+		OnlineSessionsSubsystem->MultiplayerOnDestroySessionComplete.AddDynamic(this, &UGameMenu::OnDestroySession);
+		OnlineSessionsSubsystem->MultiplayerOnStartSessionComplete.AddDynamic(this, &UGameMenu::OnStartSession);
+	}
 }
 
 void UGameMenu::MenuTearDown()
@@ -93,23 +102,11 @@ void UGameMenu::NativeDestruct()
 
 void UGameMenu::OnHostButtonClicked()
 {
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(
-			-1,
-			17.f,
-			FColor::Cyan,
-			FString(TEXT("Host Button Clicked!")));
-	}
 	if (OnlineSessionsSubsystem)
 	{
 		HostButton->SetIsEnabled(false);
 		OnlineSessionsSubsystem->CreateSession(NumPublicConnections, MatchType);
-
-		if (const auto World = GetWorld())
-		{
-			World->ServerTravel(FString("/Game/ThirdPerson/Maps/GameLobby?listen"));
-		}
+		
 	}
 }
 
@@ -132,3 +129,42 @@ void UGameMenu::OnJoinButtonClicked()
 	}
 }
 
+void UGameMenu::OnCreateSession(bool bWasSuccessful)
+{
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 17.f, FColor::Yellow, FString(TEXT("UMenu::OnCreateSessionComplete ")));
+	}
+	HostButton->SetIsEnabled(true);
+	
+	if (bWasSuccessful)
+	{
+		if (const auto World = GetWorld())
+		{
+			World->ServerTravel(FString("/Game/ThirdPerson/Maps/GameLobby?listen"));
+		}
+	}
+	else
+	{
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 17.f, FColor::Red, FString(TEXT("Failed to create session")));
+		}
+	}
+}
+
+void UGameMenu::OnFindSessions(const TArray<FOnlineSessionSearchResult>& SearchResults, bool bWasSuccessful)
+{
+}
+
+void UGameMenu::OnJoinSession(EOnJoinSessionCompleteResult::Type Result)
+{
+}
+
+void UGameMenu::OnDestroySession(bool bWasSuccessful)
+{
+}
+
+void UGameMenu::OnStartSession(bool bWasSuccessful)
+{
+}
