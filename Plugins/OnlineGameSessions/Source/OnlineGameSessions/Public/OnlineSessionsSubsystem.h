@@ -12,13 +12,11 @@
 ///---------------------------------------------------------------------------------
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMultiplayerOnCreateSessionComplete, bool, bWasSuccessful);
-
 DECLARE_MULTICAST_DELEGATE_TwoParams(FMultiplayerOnFindSessionsComplete,
 									 const TArray<FOnlineSessionSearchResult>& SearchResults,
 									 bool bWasSuccessful);
 DECLARE_MULTICAST_DELEGATE_OneParam(FMultiplayerOnJoinSessionComplete, EOnJoinSessionCompleteResult::Type Result);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMultiplayerOnDestroySessionComplete, bool, bWasSuccessful);
-
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMultiplayerOnStartSessionComplete, bool, bWasSuccessful);
 
 ///---------------------------------------------------------------------------------
@@ -33,6 +31,7 @@ public:
 	UOnlineSessionsSubsystem();
 
 	// Called by Menu class.
+	
 	UFUNCTION()
 	void CreateSession(int32 NumPublicConnections, const FString& MatchType);
 
@@ -67,6 +66,7 @@ private:
 	
 	IOnlineSessionPtr SessionInterface;
 	TSharedPtr<FOnlineSessionSettings> LastSessionSettings;
+	TSharedPtr<FOnlineSessionSearch> LastSessionSearch;
 	
 	// Online Session Interface delegate and delegate handle list.
 	FOnCreateSessionCompleteDelegate CreateSessionCompleteDelegate;
