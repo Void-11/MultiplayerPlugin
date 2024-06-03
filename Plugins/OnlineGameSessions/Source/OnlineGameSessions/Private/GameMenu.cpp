@@ -224,7 +224,7 @@ void UGameMenu::OnJoinSession(EOnJoinSessionCompleteResult::Type Result)
                     {
                         GEngine->AddOnScreenDebugMessage(
                             -1,
-                            15.f,
+                            17.f,
                             FColor::Yellow,
                             FString(TEXT("UMenu::OnJoinSessionComplete - Client Travel Complete")));
                     }
@@ -271,7 +271,7 @@ void UGameMenu::OnJoinSession(EOnJoinSessionCompleteResult::Type Result)
         {
             GEngine->AddOnScreenDebugMessage(-1,
                                              17.f,
-                                             FColor::Yellow,
+                                             FColor::Blue,
                                              FString(TEXT("UMenu::OnJoinSessionComplete - Failed to get subsystem")));
         }
     }
