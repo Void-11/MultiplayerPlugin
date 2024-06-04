@@ -1,13 +1,16 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "{76E3B418-4DBD-E604-63C0-4A8E345F414F}",
+	"EngineAssociation": "{690E9FF4-498F-28E2-FA57-6CAB90777D23}",
 	"Category": "",
 	"Description": "",
 	"Modules": [
 		{
 			"Name": "OnlineMenuSystem",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine"
+			]
 		}
 	],
 	"Plugins": [
