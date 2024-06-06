@@ -6,9 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "LobbyGameMode.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class ONLINEMENUSYSTEM_API ALobbyGameMode : public AGameModeBase
 {

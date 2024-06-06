@@ -63,7 +63,7 @@ AOnlineMenuSystemCharacter::AOnlineMenuSystemCharacter():
 	if (OnlineSubsystem)
 	{
 		OnlineSessionInterface = OnlineSubsystem->GetSessionInterface();
-
+		/*
 		if (GEngine)
 		{
 			GEngine->AddOnScreenDebugMessage(
@@ -72,7 +72,7 @@ AOnlineMenuSystemCharacter::AOnlineMenuSystemCharacter():
 				FColor::Purple,
 				FString::Printf(TEXT("Found subsystem %s"), *OnlineSubsystem->GetSubsystemName().ToString())
 			);
-		}
+		}*/
 	}
 }
 
