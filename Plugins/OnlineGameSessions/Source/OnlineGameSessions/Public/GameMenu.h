@@ -27,7 +27,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void MenuSetup(int32 InNumPublicConnections = 7,
 				   const FString& InMatchType = TEXT("FreeForAll"),
-				   const FString& InPathToLobby = TEXT("Lobby"));
+				   const FString& LobbyPath = FString("/Game/ThirdPerson/Maps/GameLobby"));
 
 	virtual bool Initialize() override;
 
@@ -93,4 +93,5 @@ private:
 
 	int32 NumPublicConnections{ 7 };
 	FString MatchType{ TEXT("FreeForAll") };
+	FString PathToLobby{ TEXT("") };
 };

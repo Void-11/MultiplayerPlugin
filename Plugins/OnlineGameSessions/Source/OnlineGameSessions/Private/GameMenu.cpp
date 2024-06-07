@@ -8,10 +8,11 @@
 #include "OnlineSubsystem.h"
 #include "OnlineSubsystemUtils.h"
 
-void UGameMenu::MenuSetup(const int32 InNumPublicConnections, const FString& InMatchType, const FString& InPathToLobby)
+void UGameMenu::MenuSetup(const int32 InNumPublicConnections, const FString& InMatchType, const FString& LobbyPath)
 {
 	NumPublicConnections = InNumPublicConnections;
 	MatchType = InMatchType;
+	PathToLobby = FString::Printf(TEXT("%s?listen"), *LobbyPath);
 	
 	AddToViewport();
 	SetVisibility(ESlateVisibility::Visible);
@@ -144,7 +145,7 @@ void UGameMenu::OnCreateSession(bool bWasSuccessful)
 	{
 		if (const auto World = GetWorld())
 		{
-			World->ServerTravel(FString("/Game/ThirdPerson/Maps/GameLobby?listen"));
+			World->ServerTravel(PathToLobby);
 		}
 	}
 	else
