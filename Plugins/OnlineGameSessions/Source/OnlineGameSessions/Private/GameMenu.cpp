@@ -139,7 +139,6 @@ void UGameMenu::OnCreateSession(bool bWasSuccessful)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 17.f, FColor::Yellow, FString(TEXT("UMenu::OnCreateSessionComplete ")));
 	}
-	HostButton->SetIsEnabled(true);
 	
 	if (bWasSuccessful)
 	{
@@ -154,6 +153,7 @@ void UGameMenu::OnCreateSession(bool bWasSuccessful)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 17.f, FColor::Red, FString(TEXT("Failed to create session")));
 		}
+		HostButton->SetIsEnabled(true);
 	}
 }
 
@@ -199,10 +199,11 @@ void UGameMenu::OnFindSessions(const TArray<FOnlineSessionSearchResult>& SearchR
 											 FColor::Green,
 											 FString(TEXT("UMenu::OnFindSessionsComplete - Failed to get subsystem")));
 		}
+		JoinButton->SetIsEnabled(true);
 	}
 	// This will capture all the error scenarios, success will be handled in
 	// OnJoinSession
-	JoinButton->SetIsEnabled(true);
+	
 }
 
 void UGameMenu::OnJoinSession(EOnJoinSessionCompleteResult::Type Result)
