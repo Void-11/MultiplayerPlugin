@@ -7,6 +7,7 @@
 #include "OnlineSessionsSubsystem.h"
 #include "OnlineSubsystem.h"
 #include "OnlineSubsystemUtils.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 void UGameMenu::MenuSetup(const int32 InNumPublicConnections, const FString& InMatchType, const FString& LobbyPath)
 {
@@ -85,7 +86,10 @@ bool UGameMenu::Initialize()
 		{
 			JoinButton->OnClicked.AddDynamic(this, &UGameMenu::OnJoinButtonClicked);
 		}
-		
+		if (QuitButton)
+		{
+			QuitButton->OnClicked.AddDynamic(this, &UGameMenu::OnQuitButtonClicked);
+		}
 		return true;
 	}
 	else
@@ -102,35 +106,6 @@ void UGameMenu::NativeDestruct()
 	MenuTearDown();
 
 	Super::NativeDestruct();
-}
-
-void UGameMenu::OnHostButtonClicked()
-{
-	if (OnlineSessionsSubsystem)
-	{
-		HostButton->SetIsEnabled(false);
-		OnlineSessionsSubsystem->CreateSession(NumPublicConnections, MatchType);
-		
-	}
-}
-
-void UGameMenu::OnJoinButtonClicked()
-{
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(
-			-1,
-			17.f,
-			FColor::Magenta,
-			FString(TEXT("Join Button Clicked!")));
-	}
-	if (OnlineSessionsSubsystem)
-	{
-		JoinButton->SetIsEnabled(false);
-		// We set a very high session count as we are using the DevId for game and
-		// lots of other devs will be adding sessions
-		OnlineSessionsSubsystem->FindSessions(10000);
-	}
 }
 
 void UGameMenu::OnCreateSession(bool bWasSuccessful)
@@ -277,6 +252,51 @@ void UGameMenu::OnJoinSession(EOnJoinSessionCompleteResult::Type Result)
                                              FString(TEXT("UMenu::OnJoinSessionComplete - Failed to get subsystem")));
         }
     }
+}
+
+void UGameMenu::OnHostButtonClicked()
+{
+	if (OnlineSessionsSubsystem)
+	{
+		HostButton->SetIsEnabled(false);
+		OnlineSessionsSubsystem->CreateSession(NumPublicConnections, MatchType);
+		
+	}
+}
+
+void UGameMenu::OnJoinButtonClicked()
+{
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(
+			-1,
+			17.f,
+			FColor::Magenta,
+			FString(TEXT("Join Button Clicked!")));
+	}
+	if (OnlineSessionsSubsystem)
+	{
+		JoinButton->SetIsEnabled(false);
+		// We set a very high session count as we are using the DevId for game and
+		// lots of other devs will be adding sessions
+		OnlineSessionsSubsystem->FindSessions(10000);
+	}
+}
+
+void UGameMenu::OnQuitButtonClicked()
+{
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 17.f, FColor::Green, FString(TEXT("Quit Button Clicked!")));
+	}
+	if (const auto World = GetWorld())
+	{
+		if (const auto PlayerController = World->GetFirstPlayerController())
+		{
+
+			UKismetSystemLibrary::QuitGame(this, PlayerController, EQuitPreference::Quit, false);
+		}
+	}
 }
 
 void UGameMenu::OnDestroySession(bool bWasSuccessful)

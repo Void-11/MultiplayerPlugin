@@ -79,6 +79,9 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	UButton* JoinButton{ nullptr };
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* QuitButton{ nullptr };
 	
 	UFUNCTION()
 	void OnHostButtonClicked();
@@ -86,6 +89,9 @@ private:
 	UFUNCTION()
 	void OnJoinButtonClicked();
 
+	UFUNCTION()
+	void OnQuitButtonClicked();
+	
 	UPROPERTY()
 	UOnlineSessionsSubsystem* OnlineSessionsSubsystem{ nullptr };
 
